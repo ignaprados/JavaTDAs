@@ -1,19 +1,23 @@
-package colas;
+package colasLimitada;
 
-//Segunda implementacion de la cola
-
-public class ColaPI implements ColaTDA {
+public class ColaLimitadaPI implements ColaLimitadaTDA {
     int[] arr; // arreglo que contiene la info de la colas
     int inx; // cantidad de elementos en la cola
-
-    public void InicializarCola() {
-        arr = new int[100];
+    int limite; // limite de la cola
+    public void InicializarCola(int x) {
+        arr = new int[x];
         inx = 0;
+        limite = x; // limite igual a x
     }
 
-    public void Acolar(int x) {
-        arr[inx] = x;
-        inx++;
+    public int Acolar(int x) {
+        if (inx < limite) {
+            arr[inx] = x;
+            inx++;
+            return 0;	// devuelve 0 si se acolo
+        } else {
+            return 1; // devuelve 1 si no se acolo pq esta llena
+        }
     }
 
     public void Desacolar() {
@@ -25,36 +29,26 @@ public class ColaPI implements ColaTDA {
         inx--;
     }
 
-    public void MultiDesacolar(int n) {
-
-        if (n >= inx) { // si la cantidad de elementos a desacolar es mayor o igual a la cantidad de elementos en la cola la vacia
-            inx = 0;
-        } else {
-            for (int i = 0; i < n; i++) {   // itera n veces
-
-                for (int j = 0; j < inx - 1; j++) { // mueve los elementos hacia la izquierda (desacolar)
-                    arr[j] = arr[j + 1];
-                }
-                inx--;
-            }  
-        }
-
-    }
-
     public boolean ColaVacia() {
         return inx == 0;
     }
-    
 
     public int Primero() {
         return arr[0];
     }
-    
+
+    public boolean ColaLlena() { // si la cola est� llena devuelve true
+        if (inx == limite) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /* --------------------- EXTRAS -------------------------- */
     public String Mostrarcola() { // Metodo extra para ver los elementos de la cola
         String cola = ""; // string que contiene la cola
-        
+
         for (int i = 0; i < inx; i++) {
             cola = cola + (arr[i] + ","); // concatena los elementos de la cola
         }
@@ -64,10 +58,9 @@ public class ColaPI implements ColaTDA {
 
     public void Multidesacolar(int x) { // Metodo extra para desacolar x elementos
 
-		while (!ColaVacia() && x > 0) {	// si la cola no esta vacia
-			Desacolar();
-			x--;
-		}
-	 }
-
+        while (!ColaVacia() && x > 0) {    // si la cola no esta vacia
+            Desacolar();
+            x--;
+        }
+     }
 }

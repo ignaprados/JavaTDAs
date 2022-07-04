@@ -7,7 +7,7 @@ public class ConjuntoA implements ConjuntoTDA {
     private int cant;   // cantidad de elementos en el conjunto
 
     public void InicializarConjunto() {
-        a = new int[100];
+        a = new int[100]; // TAMAÑO MÁXIMO ACOTADO
         cant = 0;
     }
 
@@ -17,6 +17,16 @@ public class ConjuntoA implements ConjuntoTDA {
             cant++; // incrementa cantidad de elementos
         }
     }
+
+    //Universo Acotado - TP2 Ejercicio 4c  ---------------
+    /*public void Agregar(int x,int N) {
+        if(x > 0 && x < N) {
+            if (!this.Pertenece(x)) { //verificacion de no pertenencia
+			    a[cant] = x;
+			    cant++;
+        }
+    }
+	}*/
 
     public int Elegir() {
         return a[cant - 1]; // elige el ultimo por conveniencia

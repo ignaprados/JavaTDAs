@@ -1,4 +1,5 @@
 package pilas;
+import conjuntos.*;
 
 public class app {
 
@@ -28,7 +29,7 @@ public class app {
 
     /*--------------------------------- METODOS EXTRA ---------------------------------*/
 
-    // crear una funcion para imprimir la pila usando PilaTDA ---------------
+    // funcion para imprimir la pila usando PilaTDA ---------------
     public static String mostrarPila(PilaTDA pila) {
         String resultado = "[ ";
         while (!pila.PilaVacia()) { // mientras no este vacio la pila
@@ -39,7 +40,7 @@ public class app {
         return resultado;
     }
 
-    // crear una funcion para pasar una Pila a otra Pila (dejándola en orden inverso) - TP1 Ejercicio 2a ---------------
+    // funcion para pasar una Pila a otra Pila (dejándola en orden inverso) - TP1 Ejercicio 2a ---------------
     public static void pasarPila(PilaTDA origen, PilaTDA destino) {
         while (!origen.PilaVacia()) { // mientras no este vacia la pila
             destino.Apilar(origen.Tope()); // apilar el tope de la pila origen en la pila destino
@@ -47,7 +48,7 @@ public class app {
         }
     }
 
-    // crear una funcion para copiar una Pila en otra (dejándola en el mismo orden que la original) - TP1 Ejercicio 2b ---------------
+    // funcion para copiar una Pila en otra (dejándola en el mismo orden que la original) - TP1 Ejercicio 2b ---------------
     public static void copiarPila(PilaTDA origen, PilaTDA destino) {
         PilaTDA aux = new PilaTF(); // crear una pila auxiliar
         aux.InicializarPila();
@@ -62,7 +63,7 @@ public class app {
         }
     }
 
-    // crear una funcion para invertir el contenido de una Pila - TP1 Ejercicio 2c ---------------
+    // funcion para invertir el contenido de una Pila - TP1 Ejercicio 2c ---------------
     public static void invertirPila(PilaTDA origen) {
         PilaTDA aux = new PilaTF();
         PilaTDA aux2 = new PilaTF(); // crear dos pilas auxiliares
@@ -83,7 +84,7 @@ public class app {
         }
     }
 
-    // crear una funcion para contar los elementos de una Pila - TP1 Ejercicio 2d ---------------
+    // funcion para contar los elementos de una Pila - TP1 Ejercicio 2d ---------------
     public static int contarElementos(PilaTDA origen) {
         int i = 0;
 
@@ -94,7 +95,7 @@ public class app {
         return i;
     }
 
-    // crear una funcion para sumar los elementos de una Pila - TP1 Ejercicio 2e ---------------
+    // funcion para sumar los elementos de una Pila - TP1 Ejercicio 2e ---------------
     public static int sumarElementos(PilaTDA origen) {
 		int n = 0;
 
@@ -105,7 +106,7 @@ public class app {
 		return n;
 	}
 
-    // crear una funcion para calcular el promedio de los elementos de una Pila - TP1 Ejercicio 2f ---------------
+    // funcion para calcular el promedio de los elementos de una Pila - TP1 Ejercicio 2f ---------------
     public static float CalcularPromedio(PilaTDA origen) {
 		float suma = 0;
 		float resultado;
@@ -120,7 +121,7 @@ public class app {
 		return resultado;
 	}
 
-    // crear una funcion para determinar si una Pila es capicúa o no. Para ser capicúa debe cumplir  ---------------
+    // funcion para determinar si una Pila es capicúa o no. Para ser capicúa debe cumplir  ---------------
 	// que el primer elemento es igual al último, el segundo igual al penúltimo, etc - TP3 Ejercicio 1a
 	public static boolean esCapicua(PilaTDA origen) {
 		PilaTDA aux = new PilaTF();
@@ -155,7 +156,7 @@ public class app {
 
     }
 
-    // crear una funcion para eliminar de una Pila P las repeticiones de elementos, dejando un representante de cada uno de ---------------
+    // funcion para eliminar de una Pila P las repeticiones de elementos, dejando un representante de cada uno de ---------------
     // los elementos presentes originalmente. Se deberá respetar el orden original de los elementos, y en el caso de los 
     // repetidos se conservará el primero que haya ingresado en P - TP3 Ejercicio 1b
     public static void eliminarRepetidos(PilaTDA origen) {
@@ -200,6 +201,58 @@ public class app {
             origen.Apilar(aux.Tope());
             aux.Desapilar();
         }
+    }
+
+    // Repartir una Pila P en dos mitades M1 y M2 de elementos consecutivos, respetando el orden. ---------------
+    // Asumir que la Pila P contiene un número par de elementos. - TP1 Ejercicio 1c
+    public static void Repartir(PilaTDA pila, PilaTDA M1, PilaTDA M2) {
+		
+        PilaTDA aux = new PilaTF(); // crear una pila auxiliar
+        aux.InicializarPila();
+
+        int cant = 0; // cantidad de elementos de la pila
+
+        while (!pila.PilaVacia()) { // obtener la cantidad de elementos de la pila
+            aux.Apilar(pila.Tope());
+            pila.Desapilar();
+            cant++;
+        }
+
+        while (!aux.PilaVacia()) {  // apilar la pila auxiliar en la pila origen para no perder el orden
+            pila.Apilar(aux.Tope());
+            aux.Desapilar();
+        }
+
+        for (int i = 0; i < cant/2; i++) { // repartir la pila en dos mitades (1 mitad para M1)
+            M1.Apilar(pila.Tope());
+            pila.Desapilar();
+        }
+
+        while (!pila.PilaVacia()) {  // repartir la pila en dos mitades (2 mitad para M2)
+            M2.Apilar(pila.Tope());
+            pila.Desapilar();
+        }
+
+    }
+
+    // funcion para generar el conjunto de elementos que se repiten en una Pila - TP1 Ejercicio 1d ---------------
+    public static ConjuntoTDA ConjuntoRepetidos(PilaTDA origen) {
+
+        ConjuntoTDA aux = new ConjuntoA();  // crear 2 conjuntos auxiliares
+        aux.InicializarConjunto();
+        ConjuntoTDA aux2 = new ConjuntoA();
+        aux2.InicializarConjunto();
+
+        while (!origen.PilaVacia()) { // pasar a aux2 los elementos repetidos de la pila
+            int x = origen.Tope();
+
+            if (aux.Pertenece(x)) { // si el elemento esta en el conjunto aux (repetido)
+                aux2.Agregar(x);    // agregar el elemento al conjunto aux2
+            }
+            aux.Agregar(x);
+            origen.Desapilar();
+        }
+        return aux2;
     }
 
 }

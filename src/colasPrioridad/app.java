@@ -1,5 +1,7 @@
 package colasPrioridad;
 
+import diccionariosMultiples.*;
+
 public class app {
 
     /*--------------------------------- MAIN ---------------------------------*/
@@ -30,7 +32,7 @@ public class app {
 
     /*--------------------------------- METODOS EXTRA ---------------------------------*/
 
-    // crear una funcion para imprimir la cola con prioridad usando ColaTDA (sin perder la cola original) ---------------
+    // funcion para imprimir la cola con prioridad usando ColaTDA (sin perder la cola original) ---------------
     public static String mostrarCola(ColaPrioridadTDA cola) {
         String resultado = "[ ";
         ColaPrioridadTDA aux = new ColaPrioridadLD();   // crear una cola auxiliar
@@ -50,7 +52,7 @@ public class app {
         return resultado;
     }
 
-    // crear una funcion para combinar dos colas con prioridades CP1 y CP2, generando una nueva cola con prioridades.
+    // funcion para combinar dos colas con prioridades CP1 y CP2, generando una nueva cola con prioridades.
     // Considerar que a igual prioridad, los elementos de la CP1 son más prioritarios que los de la CP2 - TP1 Ejercicio 6a ---------------
     public static void combinarColas(ColaPrioridadTDA origen1, ColaPrioridadTDA origen2, ColaPrioridadTDA destino) {
 
@@ -65,7 +67,7 @@ public class app {
 		}
 	}
 
-    // crear una funcion para determinar si dos Colas con prioridad son idénticas (sin perder las colas originales) - TP1 Ejercicio 6b ---------------
+    // funcion para determinar si dos Colas con prioridad son idénticas (sin perder las colas originales) - TP1 Ejercicio 6b ---------------
     public static boolean SonIdenticas(ColaPrioridadTDA origen1, ColaPrioridadTDA origen2) {
 		ColaPrioridadTDA aux = new ColaPrioridadDA();
 		ColaPrioridadTDA aux2 = new ColaPrioridadDA();
@@ -114,6 +116,19 @@ public class app {
 		}
 		return identicas;
 	}
+
+	// funcion para generar un Diccionario Múltiple que permita, para cada valor presente en la ColaPrioridad C recuperar todas las ---------------
+	// prioridades que tiene asociadas en C - TP3 Ejercicio 4a
+	public static DiccionarioMultipleTDA generarDiccionarioColaPrioridad(ColaPrioridadTDA cola) {
+		DiccionarioMultipleTDA dic = new DiccionarioMultipleA();
+		dic.InicializarDiccionario();
+
+		while (!cola.ColaVacia()) {	// acolar la cola en el diccionario multiple
+			dic.Agregar(cola.Primero(), cola.Prioridad());	// agregar el elemento y la prioridad (si el elemento ya existe, se agrega la prioridad)
+			cola.Desacolar();
+		}
+		return dic;
+	}	
 
     
 }

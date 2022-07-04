@@ -29,7 +29,7 @@ public class app {
         System.out.println(cola.Primero());*/
 
 		// simulacro
-		ColaTDA origen = new ColaLD();
+		ColaTDA origen = new ColaPI();
 		origen.InicializarCola();
 
 		origen.Acolar(1);
@@ -159,7 +159,7 @@ public class app {
 	// que el primer elemento es igual al último, el segundo igual al penúltimo, etc - TP1 Ejercicio 4e
 	public static boolean esCapicua(ColaTDA origen) {
 		PilaTDA aux = new PilaTF();		// crear una pila auxiliar
-		ColaTDA aux2 = new ColaPU();	// crear una colas auxiliar
+		ColaTDA aux2 = new ColaPU();	// crear una cola auxiliar
 		aux.InicializarPila();
 		aux2.InicializarCola();
 
@@ -268,66 +268,140 @@ public class app {
 		return origen;
 	}
 	
-	// funcion para concatenar una cola y eliminar los repetidos - Ejercicios Simulacro Final ---------------
+	// funcion para concatenar una cola y eliminar los repetidos - Ejercicio Simulacro Final ---------------
 	public static ColaTDA ConcatenarColaRep(ColaTDA cola1, ColaTDA cola2) {
 		
-		ColaTDA destino = new ColaLU();
+		ColaTDA destino = new ColaLD();		// crear cola destino
 		destino.InicializarCola();
-		
-		ColaTDA colaaux = new ColaLU();
+		ColaTDA colaaux = new ColaLD();		// crear cola auxiliar
 		colaaux.InicializarCola();
-		
-		ColaTDA colaaux2 = new ColaLU();
-		colaaux2.InicializarCola();
-		
-		ConjuntoTDA aux = new ConjuntoA();
+		ColaTDA colaaux2 = new ColaLD();	// crear cola auxiliar2
+		colaaux2.InicializarCola();		
+		ConjuntoTDA aux = new ConjuntoA();	// crear conjunto auxiliar
 		aux.InicializarConjunto();
 		
-		while (!cola1.ColaVacia()) {
+		while (!cola1.ColaVacia()) {	// acolar la cola 1 en la cola auxiliar
 			int x = cola1.Primero();
 			aux.Agregar(x);
 			colaaux.Acolar(x);
 			cola1.Desacolar();
 		}
-		
-		while (!cola2.ColaVacia()) {
+		while (!cola2.ColaVacia()) {	// acolar la cola 2 en la cola auxiliar2
 			int y = cola1.Primero();
 			aux.Agregar(y);
 			colaaux2.Acolar(y);
 			cola1.Desacolar();
 		}
 		
-		while (!colaaux.ColaVacia()) {
+		while (!colaaux.ColaVacia()) {	// acolar la cola auxiliar en la cola destino
 			int z = colaaux.Primero();
 			
-			if (aux.Pertenece(z)) {
+			if (aux.Pertenece(z)) {	// si el elemento esta en el conjunto auxiliar, acolar en destino y origen
 				destino.Acolar(z);
 				cola1.Acolar(z);
-				aux.Sacar(z);
+				aux.Sacar(z);		// sacar el elemento del conjunto auxiliar
 				
 			} else {
-				cola1.Acolar(z);
+				cola1.Acolar(z);	// si no esta en el conjunto auxiliar, acolar solo en origen
 				colaaux.Desacolar();
 			}
 		}
-		
-		while (!colaaux2.ColaVacia()) {
+		while (!colaaux2.ColaVacia()) {	// acolar la cola auxiliar2 en la cola destino
 			int r = colaaux2.Primero();
 			
-			if (aux.Pertenece(r)) {
+			if (aux.Pertenece(r)) {	// si el elemento esta en el conjunto auxiliar, acolar en destino y origen
 				destino.Acolar(r);
 				cola2.Acolar(r);
-				aux.Sacar(r);
+				aux.Sacar(r);	// sacar el elemento del conjunto auxiliar
 				
 			} else {
-				cola1.Acolar(r);
-				colaaux.Desacolar();
+				cola2.Acolar(r);	// si no esta en el conjunto auxiliar, acolar solo en origen2
+				colaaux2.Desacolar();
 			}
-			
 		}
-		
 		return destino;
 	}
 	
+	// funcion para eliminar de una Cola C las repeticiones de elementos, dejando un representante de cada uno de los elementos ---------------
+	// presentes originalmente. Se deberá respetar el orden original de los elementos, y en el caso de los repetidos 
+	// se conservará el primero que haya ingresado en C - TP3 Ejercicio 2a
+	public static ColaTDA EliminarRepetidos(ColaTDA origen) {
+		ColaTDA aux = new ColaLD();
+		aux.InicializarCola();// crear cola auxiliar
+
+		ConjuntoTDA elem = new ConjuntoA();
+		elem.InicializarConjunto();	// crear conjunto elementos
+
+		while (!origen.ColaVacia()) {	// acolar la cola origen en la cola auxiliar y agregar los elementos al conjunto
+			int x = origen.Primero();
+			elem.Agregar(x);
+			aux.Acolar(x);
+			origen.Desacolar();
+		}
+
+		while (!aux.ColaVacia()) {	// acolar la cola auxiliar en la cola origen
+			int y = aux.Primero();
+
+			if (elem.Pertenece(y)) {	// si el elemento esta en el conjunto elementos, acolar en origen y sacar del conjunto
+				origen.Acolar(y);
+				aux.Desacolar();
+				elem.Sacar(y);
+			} else {
+				aux.Desacolar();	// si no esta en el conjunto elementos, no acolar
+			}
+		}
+		return origen;
+	}
+
+	// funcion para repartir una Cola C en dos mitades M1 y M2 de elementos consecutivos, respetando el orden. ---------------
+	// Asumir que la cantidad de elementos de C es par. - TP3 Ejercicio 2b
+	public static void RepartirCola(ColaTDA origen, ColaTDA M1, ColaTDA M2) {
+		ColaTDA aux = new ColaLD();
+		aux.InicializarCola();	// crear cola auxiliar
+		
+		int cant = 0;	// cantidad de elementos
+
+		while (!origen.ColaVacia()) {	// acolar la cola origen en la cola auxiliar y contar los elementos
+			int x = origen.Primero();
+			aux.Acolar(x);
+			origen.Desacolar();
+			cant++;
+		}
+
+		for (int i = 0; i < cant/2; i++) {	// acolar la mitad de la cola auxiliar en la cola M1
+			int y = aux.Primero();
+			M1.Acolar(y);
+			aux.Desacolar();
+		}
+
+		while (!aux.ColaVacia()) {	// acolar el resto de la cola auxiliar en la cola M2
+			int z = aux.Primero();
+			M2.Acolar(z);
+			aux.Desacolar();
+		}
+	}
+
+	// funcion para generar el conjunto de elementos que se repiten en una Cola - TP3 Ejercicio 2c ---------------
+	public static ConjuntoTDA ColaRepetidos(ColaTDA origen) {
+
+		ConjuntoTDA aux = new ConjuntoA();	// crear conjunto aux
+		aux.InicializarConjunto();
+
+		ConjuntoTDA rep = new ConjuntoA();	// crear conjunto rep
+		rep.InicializarConjunto();
+
+
+		while (!origen.ColaVacia()) {	// acolar la cola origen en la cola auxiliar
+			int x = origen.Primero();
+			if (aux.Pertenece(x)) {	// si el elemento esta en el conjunto auxiliar, acolar en rep
+				rep.Agregar(x);
+			}
+			aux.Agregar(x);
+			origen.Desacolar();
+		}
+
+		return rep;
+	}
 
 }
+

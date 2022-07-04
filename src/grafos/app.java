@@ -1,5 +1,6 @@
 package grafos;
 import conjuntos.*;
+import diccionariosMultiples.*;
 import diccionariosSimples.*;
 
 public class app {
@@ -11,7 +12,7 @@ public class app {
             c.InicializarConjunto();
             GrafoTDA grafo = new GrafoMA();
             grafo.InicializarGrafo();
-            DiccionarioSimpleTDA d = new DiccionarioSimpleA();
+            DiccionarioMultipleTDA d = new DiccionarioMultipleA();
             d.InicializarDiccionario();
             grafo.AgregarVertice(1);
             grafo.AgregarVertice(2);
@@ -19,8 +20,8 @@ public class app {
             grafo.AgregarArista(1, 2, 7);
             grafo.AgregarArista(1, 3, 5);
             grafo.AgregarArista(2, 3, 9);
-            d = SumaPesos(grafo);
-            mostrarDiccionario(d);
+            d = AdyacentesEnDicc(grafo);
+            mostrarDiccionarioMul(d);
 
     }
 
@@ -255,49 +256,48 @@ public class app {
     }
     
     // funcion para generar una matriz de adyacencia a partir de un grafo - Ejercicio Simulacro Final --------------
-    public static class nodomatriz {
+    public static class nodomatriz {    // clase para guardar matriz de adyacencia y vertices
     	int[][] ady;
     	int[] vertices;
     }
     
     public static nodomatriz MatrizAdyacencia(GrafoTDA grafo) {
     	
-    	ConjuntoTDA vertices = grafo.Vertices();
+    	ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
     	
     	int cant = 0;
     	
-    	while(!vertices.ConjuntoVacio()) {
+    	while(!vertices.ConjuntoVacio()) {  // itero en los vertices para contar la cantidad de vertices
     		cant++;
     		vertices.Sacar(vertices.Elegir());
     	}
     	
-    	nodomatriz matriz = new nodomatriz();
+    	nodomatriz matriz = new nodomatriz();   // creo nodo de matriz con la cantidad de vertices
     	matriz.ady = new int[cant][cant];
     	matriz.vertices = new int[cant];
     	
-    	vertices = grafo.Vertices();
+    	vertices = grafo.Vertices();    // vuelvo a rellenar el conjunto de vertices
     	
     	int x;
     	int y;
     	
-    	for (int i = 0; i <= cant; i++) {
+    	for (int i = 0; i <= cant; i++) {   // itero en el conjunto de vertices
     		x = vertices.Elegir();
-    	
-    		matriz.vertices[i] = x;
+    		matriz.vertices[i] = x;   // guardo los vertices en el array de vertices
     		vertices.Sacar(x);
     	}
     	
-    	for (int i = 0; i <= cant; i++) {
+    	for (int i = 0; i <= cant; i++) {   // itero en las filas de la matriz
     		
-    		x = matriz.vertices[i];
+    		x = matriz.vertices[i];  // obtengo el vertice de la fila
   
-        	for (int j = 0; j <= cant; j++) {
-        		y = vertices.Elegir();
+        	for (int j = 0; j <= cant; j++) {   // itero en las columnas de la matriz
+        		y = vertices.Elegir();  // obtengo el vertice de la columna
         		
-        		if (grafo.ExisteArista(x, y)) {
-        			matriz.ady[i][j] = grafo.PesoArista(x, y);
+        		if (grafo.ExisteArista(x, y)) { // pregunto si hay una arista que vaya de x a y
+        			matriz.ady[i][j] = grafo.PesoArista(x, y);  // guardo el peso de la arista en la matriz
         		} else {
-        			matriz.ady[i][j] = 0;
+        			matriz.ady[i][j] = 0;   // si no hay una arista, guardo 0 en la matriz
         		} 	
         	}
     	}
@@ -337,6 +337,41 @@ public class app {
         return d; 
     }
 
+    // funcion para obtener un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Final --------------
+    public static DiccionarioMultipleTDA AdyacentesEnDicc(GrafoTDA grafo) {
+        DiccionarioMultipleTDA d = new DiccionarioMultipleA();
+        d.InicializarDiccionario();
+        ConjuntoTDA aux = new ConjuntoA();
+        ConjuntoTDA aux2 = new ConjuntoA(); // crear conjuntos auxiliares y diccionario
+        aux.InicializarConjunto();
+        aux = grafo.Vertices(); // obtener conjunto de vertices
+        aux2.InicializarConjunto();
+        aux2 = grafo.Vertices();
+
+        int v;
+        int v2;
+
+        while (!aux.ConjuntoVacio()) {  // iterar sobre los vertices del conjunto auxiliar
+            v = aux.Elegir();
+            aux2 = grafo.Vertices();    // obtener conjunto de vertices
+
+            while (!aux2.ConjuntoVacio()){  // iterar sobre los vertices del conjunto auxiliar2
+                v2 = aux2.Elegir(); 
+                if (grafo.ExisteArista(v, v2) && (v != v2)) {    // si existe arista entre v y v2, agregar nodo adyacente a diccionario
+                    d.Agregar(v, v2);
+                }
+                aux2.Sacar(v2);
+            }
+
+            if ((d.Recuperar(v)).ConjuntoVacio()) { // si el diccionario no tiene nodos adyacentes, agregar nodo al diccionario con valor 0
+                d.Agregar(v, 0);;
+            }
+            aux.Sacar(v);
+
+        }
+        return d; 
+    }
+
 
     /*--------------------------------- METODOS DICCIONARIO ---------------------------------*/
 
@@ -351,5 +386,22 @@ public class app {
         }
         System.out.println(diccionario);
     }
+
+        // crear funcion para imprimir el diccionario usando DiccionarioMultipleTDA ---------------
+        public static void mostrarDiccionarioMul(DiccionarioMultipleTDA DicMul) {
+            ConjuntoTDA claves;
+            claves = DicMul.Claves();   // obtener conjunto claves del diccionario multiple
+            while (!claves.ConjuntoVacio()) {   // obtener clave y valor
+                int clave = claves.Elegir();
+                ConjuntoTDA valores = DicMul.Recuperar(clave);  // obtener conjunto valores de la clave
+                System.out.print("Clave: " + clave + " Valores: "); 
+                while (!valores.ConjuntoVacio()) {  // imprimir valores
+                    System.out.print(valores.Elegir() + " ");   
+                    valores.Sacar(valores.Elegir());    // sacar valor del conjunto
+                }
+                System.out.println();   
+                claves.Sacar(clave);    
+            }
+        }
 
 }
