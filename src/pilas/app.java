@@ -203,6 +203,34 @@ public class app {
         }
     }
 
+    // funcion para eliminar de una Pila P las repeticiones de elementos, dejando un representante de cada uno de ---------------
+    // los elementos presentes originalmente. Se deberá respetar el orden original de los elementos, y en el caso de los 
+    // repetidos se conservará el primero que haya ingresado en P - TP3 Ejercicio 1b (MEJORADO)
+    public static PilaTDA eliminarRepetidosMejorado(PilaTDA origen) {
+        PilaTDA aux = new PilaTF();;
+        aux.InicializarPila();  // crear una pila auxiliar
+
+        ConjuntoTDA conjunto = new ConjuntoA(); // crear un conjunto para guardar los elementos de la pila origen
+        conjunto.InicializarConjunto();
+
+        while (!origen.PilaVacia()) { // pasar los elementos de la pila al conjunto y pila aux
+            int x = origen.Tope();
+            conjunto.Agregar(x);
+            aux.Apilar(x);
+            origen.Desapilar();
+        }
+
+        while (!aux.PilaVacia()) { // pasar los elementos de la pila al origen (si no esta repetido se agrega)
+            int x = aux.Tope();
+            if (conjunto.Pertenece(x)) {    // si el elemento esta en el conjunto
+                origen.Apilar(x);
+                conjunto.Sacar(x);  // lo agrego al origen y lo saco del conjunto
+            } 
+            aux.Desapilar();
+        }
+        return origen;
+    }
+
     // Repartir una Pila P en dos mitades M1 y M2 de elementos consecutivos, respetando el orden. ---------------
     // Asumir que la Pila P contiene un número par de elementos. - TP1 Ejercicio 1c
     public static void Repartir(PilaTDA pila, PilaTDA M1, PilaTDA M2) {
