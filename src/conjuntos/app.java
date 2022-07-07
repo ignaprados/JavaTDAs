@@ -190,7 +190,7 @@ public class app {
 
     // funcion para determinar si los elementos de una Pila P son los mismos que los de una Cola C. ---------------
     // No interesa el orden ni si están repetidos o no. - TP3 Ejercicio 3g 
-    public static boolean Iguales(PilaTDA P, ColaTDA C) {
+    public static boolean IgualesPilaCola(PilaTDA P, ColaTDA C) {
         ConjuntoTDA aux = new ConjuntoA();  // conjunto auxiliar para guardar los elementos de la pila
         aux.InicializarConjunto();
         ConjuntoTDA aux2 = new ConjuntoA(); // conjunto auxiliar para guardar los elementos de la cola
@@ -212,6 +212,18 @@ public class app {
         return true;    // si llega hasta aqui es porque los conjuntos son iguales
     }
 
+    // funcion para determinar si un conjunto está incluido en otro - Ejercicio 2 Simulacro 10 Parcial 1 ---------------
+    public static boolean Incluido(ConjuntoTDA A, ConjuntoTDA B) {
+        while(!A.ConjuntoVacio()) { // mientras no este vacio el conjunto A
+            int a = A.Elegir();
+
+            if(!B.Pertenece(a)) {   // si el elemento de A no esta en el conjunto B retorna false
+                return false;
+            }
+            A.Sacar(a);
+        }
+        return true;
+    }
 
 
 }

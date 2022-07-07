@@ -142,5 +142,31 @@ public class app {
         return cabeza;
     }
 
+    // crear una funcion para eliminar un nodo de una lista doblemente enlazada - Ejercicio 2 Simulacro 7 Parcial 1 ---------------
+    public static NodoDoble EliminarNodo(NodoDoble origen, int x) {
+        NodoDoble aux = new NodoDoble();    // nodo auxiliar para recorrer la lista
+        aux = origen;
+
+        if (origen == null) {   // si la lista esta vacia
+            System.out.println("Lista vacia");
+        } else {
+            if (origen.dato == x) { // si el valor es el primero
+                origen = origen.sig;
+                origen.prev = null;
+            } else {    // si el valor no es el primero
+                while (aux.sig != null && aux.dato != x) {  // recorro la lista hasta encontrar el valor o hasta que llegue al final (parado en el nodo a eliminar) 
+                    aux = aux.sig;
+                }
+                if (aux.dato == x) {    // si se encontro el valor
+                    (aux.prev).sig = aux.sig; // se elimina el nodo
+                    (aux.sig).prev = aux.prev;    // se elimina el nodo
+                } else {
+                    System.out.println("No se encontro el dato");   // si no se encontro el valor
+                }
+            }
+        }
+        return origen;
+    }
+
 
 }

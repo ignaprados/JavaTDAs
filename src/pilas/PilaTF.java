@@ -18,6 +18,15 @@ public class PilaTF implements PilaTDA {
         inx--;
     }
 
+    /* 
+    public void Multidesapilar (int x) {
+        if (x > inx) {  // si la cantidad de desapilaciones es mayor a la cantidad de elementos en la pila vacio la pila
+            inx = 0;
+        } else {    // si no, desapila la cantidad de veces indicada
+            inx = inx - x;
+        }
+    } */
+
     public boolean PilaVacia() {
         return (inx == 0);
     }

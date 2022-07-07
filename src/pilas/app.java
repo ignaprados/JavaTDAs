@@ -7,23 +7,20 @@ public class app {
     public static void main(String[] args) throws Exception {
         PilaTI pila = new PilaTI();
         pila.InicializarPila();
+        pila.Apilar(4);
         pila.Apilar(3);
-        pila.Apilar(1);
         pila.Apilar(2);
         pila.Apilar(1);
-        pila.Apilar(3);
+
+        PilaTI M1 = new PilaTI();
+        M1.InicializarPila();
+        PilaTI M2 = new PilaTI();
+        M2.InicializarPila();
+        
+
+        Repartir(pila, M1, M2);
 
 
-        System.out.println(esCapicua(pila));
-
-        System.out.println(pila.Tope());
-        System.out.println(pila.Mostrarpila());
-        pila.Desapilar();
-        pila.Desapilar();
-        System.out.println(pila.Tope());
-
-        System.out.println(pila.Mostrarpila());
-        System.out.println(mostrarPila(pila));
 
     }
 
@@ -246,20 +243,24 @@ public class app {
             cant++;
         }
 
-        while (!aux.PilaVacia()) {  // apilar la pila auxiliar en la pila origen para no perder el orden
+        /*while (!aux.PilaVacia()) {  // apilar la pila auxiliar en la pila origen para no perder el orden (NO HACE FALTA)
             pila.Apilar(aux.Tope());
+            aux.Desapilar();
+        }*/
+
+        for (int i = 0; i < cant/2; i++) { // repartir la pila en dos mitades (1 mitad para M1)
+            M2.Apilar(aux.Tope());
             aux.Desapilar();
         }
 
-        for (int i = 0; i < cant/2; i++) { // repartir la pila en dos mitades (1 mitad para M1)
-            M1.Apilar(pila.Tope());
-            pila.Desapilar();
+        while (!aux.PilaVacia()) {  // repartir la pila en dos mitades (2 mitad para M2)
+            M1.Apilar(aux.Tope());
+            aux.Desapilar();
         }
 
-        while (!pila.PilaVacia()) {  // repartir la pila en dos mitades (2 mitad para M2)
-            M2.Apilar(pila.Tope());
-            pila.Desapilar();
-        }
+        /*System.out.println(mostrarPila(pila));
+        System.out.println(mostrarPila(M1));
+        System.out.println(mostrarPila(M2));*/
 
     }
 
@@ -282,5 +283,86 @@ public class app {
         }
         return aux2;
     }
+
+    // funcion para determinar si 2 pilas son equivalentes (cualquier numero que esta en una tambien esta en la otra) -  Ejercicio Simulacro Parcial 1 ---------------
+    public static boolean Equivalente(PilaTDA pila1, PilaTDA pila2) {
+        PilaTDA aux = new PilaTF(); // crear una pila auxiliar
+        aux.InicializarPila();
+
+        boolean equivalente = true; // variable para determinar si las pilas son equivalentes o no
+
+        ConjuntoTDA conjunto = new ConjuntoA(); // crear un conjunto para guardar los elementos de la pila1
+        conjunto.InicializarConjunto();
+        
+        while (!pila1.PilaVacia()) { // pasar los elementos de la pila1 a la pila aux y al conjunto
+            aux.Apilar(pila1.Tope());
+            conjunto.Agregar(pila1.Tope());
+            pila1.Desapilar();
+        }
+
+        while (!pila2.PilaVacia()) {
+            if (!conjunto.Pertenece(pila2.Tope())) { // si el elemento no esta en el conjunto
+                equivalente = false; // no son equivalentes
+            }
+            pila2.Desapilar();
+        }
+
+        return equivalente;
+        }
+
+    // funcion para determinar si dos pilas son iguales - Ejercicio Simulacro Parcial 1 ---------------
+    public static boolean Igual(PilaTDA pila1, PilaTDA pila2) {
+
+        boolean igual = true; // variable para determinar si las pilas son iguales o no
+
+        while (!pila1.PilaVacia()) { // itero con los elementos si la pila1 no esta vacia
+            if (!pila2.PilaVacia()) { // pregunto si la pila2 no esta vacia
+                if (pila1.Tope() != pila2.Tope()) { // si los elementos no son iguales retorna false
+                    igual = false; 
+                    return igual;
+                }
+                pila2.Desapilar();
+            }
+            pila1.Desapilar();
+        }
+        return igual;
+    }
+
+    // funcion para determinar si una pila es está incluida en otra (respetando el orden de la secuencia de numeros) - Ejercicio 1 Simulacro 7 Parcial 1 ---------------
+    public static boolean Incluida(PilaTDA pila1, PilaTDA pila2) {
+        PilaTDA aux = new PilaTF(); // crear una pila auxiliar
+        aux.InicializarPila();
+
+        PilaTDA aux2 = new PilaTF(); // crear una pila auxiliar
+        aux2.InicializarPila();
+
+        while (!pila2.PilaVacia()) { // itero con los elementos de la pila aux
+    
+            if (pila1.Tope() != pila2.Tope()) { // si los elementos no son iguales sigo probando
+                pila2.Desapilar();
+            } else {                        // si los elementos son iguales, los desapilos de la pila2 y los apilo en la pila aux y aux2
+                aux.Apilar(pila2.Tope());
+                aux2.Apilar(pila1.Tope());
+                pila2.Desapilar();
+                pila1.Desapilar();
+            }
+        }
+
+        if (aux.PilaVacia()) {  // si la pila aux esta vacia, es pq la pila 1 no está incluida en la pila 2
+            return false;
+        }
+
+        while (!aux.PilaVacia()) { // itero con los elementos de la pila aux para comprobar la secuencia de numeros
+            if (aux2.Tope() != aux.Tope()) { // si los elementos no son iguales return false
+                return false;
+            } else {                        // si los elementos son iguales, los desapilos de la pila aux y aux2
+                aux.Desapilar();
+                aux2.Desapilar();
+            }
+        }
+
+        return true;
+    }
+    
 
 }

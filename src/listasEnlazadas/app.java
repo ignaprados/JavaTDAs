@@ -26,6 +26,8 @@ public class app {
         Nodo tres = new Nodo();
         Nodo cuatro = new Nodo();
 
+        System.out.println(uno);
+
         uno.dato = 2;
         uno.sig = dos;
         dos.dato = 2;
@@ -142,7 +144,7 @@ public class app {
         System.out.println(aux.dato); // imprime el dato del ultimo nodo  
     }
 
-    public static void agregarListaCiclica(Nodo origen) {
+    public static void agregarListaCiclica(Nodo origen) { // agrega un nodo al final de la lista
 
         Nodo nuevo = new Nodo();  // nuevo nodo
         nuevo = origen;
@@ -151,7 +153,20 @@ public class app {
         origen.sig = nuevo;  // el nodo origen apunta al nuevo nodo
     }
 
+    // funcion para concatenar dos listas enlazadas - Ejercicio3 Simulacro 11 Parcial 1 ---------------
+    public static Nodo concatenarListas(Nodo origen1, Nodo origen2) {
 
+        Nodo aux1 = new Nodo(); // auxiliar para recorrer la lista 1
+        aux1 = origen1;
+        Nodo aux2 = new Nodo(); // auxiliar para concatenar la lista 2
+        aux2 = origen2;
+
+        while (aux1.sig != null) {  // llego hasta el final de la lista 1
+            aux1 = aux1.sig;
+        }
+        aux1.sig = aux2;    // el ultimo nodo de la lista 1 apunta al primer nodo de la lista 2
+        return origen1;
+    }
 
 
 

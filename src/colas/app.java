@@ -403,5 +403,111 @@ public class app {
 		return rep;
 	}
 
+
+	// funcion para generar un método que tome como entrada la cola Entrada y devuelva una cola Salida conformada como sigue: ---------------
+	// Los valores que estén por encima del promedio general de las entradas se acolarán en la cola Salida.... - Ejercicio 1 Simulacro 10 Parcial 1
+	public static ColaTDA Separar(ColaTDA entrada) {
+		ColaTDA aux = new ColaLD();
+		aux.InicializarCola();	// crear cola auxiliar
+
+		ColaTDA mayores = new ColaLD();	// crear cola mayores
+		mayores.InicializarCola();
+
+		ColaTDA menores = new ColaLD();	// crear cola menores
+		menores.InicializarCola();
+
+		ColaTDA iguales = new ColaLD();	// crear cola iguales
+		iguales.InicializarCola();
+
+		ColaTDA salida = new ColaLD();	// crear cola salida
+		salida.InicializarCola();
+		
+		int cant = 0;	// cantidad de elementos
+		int suma = 0;	// suma de elementos
+		int prom = 0;	// promedio de elementos
+		
+		while (!entrada.ColaVacia()) {	// acolar la cola entrada en la cola auxiliar y contar los elementos, etc
+			int x = entrada.Primero();
+			aux.Acolar(x);
+			entrada.Desacolar();
+			cant++;
+			suma += x;
+		}
+		
+		prom = suma/cant;
+		
+		while (!aux.ColaVacia()) {	// acolar la cola auxiliar en las colas correspondientes y en entrada
+			int y = aux.Primero();
+			entrada.Acolar(y);
+
+			if (y > prom) {	// si el elemento es mayor al promedio, acolar en salida
+				mayores.Acolar(y);
+			} else if (y < prom) {	// si el elemento es menor al promedio, acolar en menores
+				mayores.Acolar(y);
+			} else {	// si el elemento es igual al promedio, acolar en iguales
+				iguales.Acolar(y);
+			}
+			aux.Desacolar();
+		}
+
+		while (!mayores.ColaVacia()) {	// acolar la cola mayores en la cola salida
+			int z = mayores.Primero();
+			salida.Acolar(z);
+			mayores.Desacolar();
+		}
+		salida.Acolar(0);	// acolar el 0 (separador) en la cola salida
+
+		while (!iguales.ColaVacia()) {	// acolar la cola iguales en la cola salida
+			int z = iguales.Primero();
+			salida.Acolar(z);
+			iguales.Desacolar();
+		}
+		salida.Acolar(0);	// acolar el 0 (separador) en la cola salida
+
+		while (!menores.ColaVacia()) {	// acolar la cola menores en la cola salida
+			int z = menores.Primero();
+			salida.Acolar(z);
+			menores.Desacolar();
+		}
+		salida.Acolar(0);	// acolar el 0 (separador) en la cola salida
+
+		return salida;
+	}
+
+	// funcion para calcular el promedio de los dos máximos elementos y los dos mínimos elementos de C - Ejercicio 4 Simulacro 11 Parcial 1 ---------------
+	public static float PromedioMaxMin(ColaTDA C, int max, int min) {		
+		int suma = 0;	// suma de elementos
+		float prom = 0;	// promedio de elementos
+		
+		int max1 = 0;	// máximo 1
+		int max2 = 0;	// máximo 2
+		int min1 = 0;	// mínimo 1
+		int min2 = 0;	// mínimo 2
+		
+		while (!C.ColaVacia()) {	// agregar los elementos de la cola en las variables correspondientes
+			int y = C.Primero();
+			if (y > max1) {	// si el elemento es mayor al máximo 1, cambiar el máximo 1
+				max2 = max1;
+				max1 = y;
+			} else if (y > max2) {	// si el elemento es mayor al máximo 2, cambiar el máximo 2
+				max2 = y;
+			}
+			if (y < min1) {	// si el elemento es menor al mínimo 1, cambiar el mínimo 1
+				min2 = min1;
+				min1 = y;
+			} else if (y < min2) {	// si el elemento es menor al mínimo 2, cambiar el mínimo 2
+				min2 = y;
+			}
+			C.Desacolar();
+		}
+
+		suma = max1 + max2 + min1 + min2;	// sumar los 4 elementos
+
+		prom = suma/4;	// calcular el promedio
+
+		return prom;
+
+	}
+
 }
 
