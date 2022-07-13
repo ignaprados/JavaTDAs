@@ -169,5 +169,15 @@ public class app {
     }
 
 
+    // funcion para sumar los nodos de una lista de forma recursiva - Ejercicio 1 Recuperatorio Parcial 1 ---------------
+    public static int sumarNodos(Nodo origen) {
+        if (origen == null) {   // si el nodo es null, retorno -1 (lista vacia)
+            return -1;
+        } else if (origen.sig == null) {   // si el nodo es el ultimo, retorno el dato del nodo (o si hay un solo nodo)
+            return origen.dato;
+        } else {    // si no es el ultimo, sumo el dato del nodo con la funcion de sumar nodos
+            return origen.dato + sumarNodos(origen.sig);
+        }
+    }
 
 }
