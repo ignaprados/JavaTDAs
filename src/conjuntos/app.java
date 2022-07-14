@@ -10,6 +10,7 @@ public class app {
     /*--------------------------------- MAIN ---------------------------------*/
 	public static void main(String[] args) throws Exception {
 
+        /*
         // crete a new ConjuntoA object
         ConjuntoA conjunto = new ConjuntoA();
         ConjuntoA conjunto2 = new ConjuntoA();
@@ -52,7 +53,17 @@ public class app {
 
         //System.out.println(conjunto.Mostrarconjunto());
 
-        System.out.println(mostrarConjunto(conjunto));
+        System.out.println(mostrarConjunto(conjunto));*/
+
+        ConjuntoTDA conjunto = new ConjuntoA();
+        conjunto.InicializarConjunto();
+
+        conjunto.Agregar(4);
+        conjunto.Agregar(1);
+        conjunto.Agregar(2);
+        conjunto.Agregar(3);
+
+        ordenarVerticesCola(conjunto);
 
     }
 
@@ -225,5 +236,49 @@ public class app {
         return true;
     }
 
+    // funcion para ordenar un conjunto de forma ascendente (menor a mayor) ---------------
+    public static void ordenarVerticesCola(ConjuntoTDA conjunto) {
+
+        ColaTDA cola = new ColaLD();    // cola
+        cola.InicializarCola();
+
+        ConjuntoTDA aux = new ConjuntoA();  // conjunto aux
+        aux.InicializarConjunto();  
+
+        while (!conjunto.ConjuntoVacio()) { // cuando este vacio el conjunto es porque está ordenado
+
+            int menor = conjunto.Elegir();  // eligo un elemento del conjunto y lo pongo como menor
+            conjunto.Sacar(menor);
+
+            while (!conjunto.ConjuntoVacio()) { // comparo todo el conjunto con el menor
+                int a = conjunto.Elegir();
+
+                if (a < menor) {    // si el elemento es menor que el menor
+                    aux.Agregar(menor);
+                    menor = a;
+                    conjunto.Sacar(a);
+                } else {        // si el elemento es mayor o igual que el menor
+                    aux.Agregar(a);
+                    conjunto.Sacar(a);
+                }
+            }
+
+            cola.Acolar(menor); // agrego el menor a la cola
+            
+            while (!aux.ConjuntoVacio()) {  // paso el conjunto aux al original nuevamente
+                int x = aux.Elegir();
+                conjunto.Agregar(x);
+                aux.Sacar(x);
+            }
+
+        }
+
+        // imprimir la cola
+        while(!cola.ColaVacia()) {
+            System.out.println(cola.Primero());
+            cola.Desacolar();
+        }
+
+    }
 
 }

@@ -8,6 +8,7 @@ public class app {
      /*--------------------------------- MAIN ---------------------------------*/
      public static void main(String[] args) {
         
+        /*
             ConjuntoTDA c = new ConjuntoA();
             c.InicializarConjunto();
             GrafoTDA grafo = new GrafoMA();
@@ -21,7 +22,17 @@ public class app {
             grafo.AgregarArista(1, 3, 5);
             grafo.AgregarArista(2, 3, 9);
             d = AdyacentesEnDicc(grafo);
-            mostrarDiccionarioMul(d);
+            mostrarDiccionarioMul(d);*/
+
+            GrafoTDA grafo = new GrafoMA();
+            grafo.InicializarGrafo();
+            grafo.AgregarVertice(2);
+            grafo.AgregarVertice(1);
+            grafo.AgregarVertice(4);
+            grafo.AgregarVertice(5);
+            grafo.AgregarVertice(3);
+
+            ordenarVertices(grafo.Vertices());
 
     }
 
@@ -303,7 +314,55 @@ public class app {
     	}
     	return matriz;
     }
-    
+
+    // funcion para ordenar el array de vertices del grafo (metodo de inserción) - Ejercicio Final Adelantado --------------
+    public static void ordenarVertices(ConjuntoTDA vertices) {
+
+        ConjuntoTDA vertAux = new ConjuntoA();  // creo conjunto auxiliar
+        vertAux.InicializarConjunto();
+
+        // obtener la cantidad de vertices
+        int cant = 0;
+
+        while (!vertices.ConjuntoVacio()) { // itero en los vertices para contar la cantidad de vertices
+            int x = vertices.Elegir();
+            vertAux.Agregar(x); // guardo los vertices en un auxiliar
+            vertices.Sacar(x);
+            cant++;
+        }
+
+        int[] array = new int[cant];    // creo array de vertices
+        int pos = 0;
+
+        while (!vertAux.ConjuntoVacio()) { // itero en los vertices aux (los paso al array)
+            int x = vertAux.Elegir();
+            array[pos] = x;    // guardo los vertices en el array
+            vertAux.Sacar(x);
+            pos++;
+        }
+
+        int aux;
+        int cont1;
+        int cont2;
+
+        // metodo de inserción (ordenamiento de array)
+        for (cont1 = 1 ; cont1 < array.length; cont1++) {   // itero en el array
+
+            aux = array[cont1]; // guardo el vertice en una variable auxiliar
+
+            for (cont2=(cont1-1); cont2 >= 0 && array[cont2] > aux; cont2--) {  // itero en el array desde el final hasta el inicio
+
+                array[cont2+1] = array[cont2];  // guardo el vertice en la posicion siguiente del array
+                array[cont2] = aux; // guardo el vertice en la posicion del array
+            }
+        }
+
+        for (int i = 0; i < array.length; i++) {    // imprimo el array de vertices
+            System.out.print(array[i] + " ");
+        }
+        System.out.println();
+    }
+
     
     // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
     public static DiccionarioSimpleTDA SumaPesos(GrafoTDA grafo) {
