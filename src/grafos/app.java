@@ -26,20 +26,34 @@ public class app {
 
             GrafoTDA grafo = new GrafoMA();
             grafo.InicializarGrafo();
-            grafo.AgregarVertice(2);
             grafo.AgregarVertice(1);
+            grafo.AgregarVertice(2);
+            grafo.AgregarVertice(3);
             grafo.AgregarVertice(4);
             grafo.AgregarVertice(5);
-            grafo.AgregarVertice(3);
+            grafo.AgregarVertice(6);
+            grafo.AgregarVertice(7);
 
-            ordenarVertices(grafo.Vertices());
+
+            grafo.AgregarArista(1, 2, 1);
+            grafo.AgregarArista(2, 4, 1);
+            grafo.AgregarArista(3, 1, 1);
+            grafo.AgregarArista(4, 1, 1);
+            grafo.AgregarArista(4, 5, 1);
+            grafo.AgregarArista(5, 3, 1);
+            grafo.AgregarArista(5, 6, 1);
+            grafo.AgregarArista(6, 7, 1);
+            grafo.AgregarArista(4, 7, 1);
+
+
+            System.out.println(existeCamino(grafo, 1, 7));
 
     }
 
     /*--------------------------------- METODOS EXTRA ---------------------------------*/
 
 
-    // funcion para determinar si un elemento está o no en un ABB - TP6 Ejercicio 4 --------------
+    // funcion para determinar los vertices adyacentes dobles de v - TP6 Ejercicio 4 --------------
     public static ConjuntoTDA AdyacentesDobles(GrafoTDA grafo, int v) {
         ConjuntoTDA aux = new ConjuntoA();
         ConjuntoTDA aux2 = new ConjuntoA();
@@ -363,6 +377,85 @@ public class app {
         System.out.println();
     }
 
+    // funcion para determinar si entre dos nodos de un grafo dirigido existe un camino - Ejercicio Simulacro 1 Final --------------
+    public static boolean existeCamino(GrafoTDA grafo, int v1, int v2) {
+
+        if (grafo.ExisteArista(v1, v2)) {
+            return true;
+
+        } else {
+
+            ConjuntoTDA salientes = verticesSalientes(grafo, v1); // todos los vertices que salen de v1
+
+            while (!salientes.ConjuntoVacio()) { // itero en los vertices que salen de v1
+                int x = salientes.Elegir();
+                if (grafo.ExisteArista(x, v2)) { // pregunto si hay una arista que vaya de x a v2
+                    return true;
+                } else {
+                    salientes.Sacar(x);
+                }
+            }
+
+            if (salientes.ConjuntoVacio()) {    // si no hay vertices que salen de v1 que llegan a v2
+                salientes = verticesSalientes(grafo, v1); 
+
+                while (!salientes.ConjuntoVacio()) { // itero en los vertices que salen de v1 preguntando si existe un camino entre x y v2
+                    int x = salientes.Elegir();
+                    salientes.Sacar(x);
+                    return existeCamino(grafo, x, v2); 
+                }
+                
+            }
+
+            return false;   
+        }
+    }
+
+    // funcion para determinar todos los vertices que salen de v1 --------------
+    public static ConjuntoTDA verticesSalientes(GrafoTDA grafo, int v1) {
+
+        // itero con el conjunto de vertices y pregunto si existe arista que salga de v1
+
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+        vertices.Sacar(v1);
+
+        ConjuntoTDA vertSalientes = new ConjuntoA();    // creo conjunto de vertices salientes
+        vertSalientes.InicializarConjunto();
+
+        while (!vertices.ConjuntoVacio()) {
+            int x = vertices.Elegir();
+
+            if (grafo.ExisteArista(v1, x)) {
+                vertSalientes.Agregar(x);
+            }
+            vertices.Sacar(x);
+        }
+
+        return vertSalientes;
+    }
+
+    // funcion para determinar todos los vertices que llegan a v2 --------------
+    public static ConjuntoTDA verticesLlegando(GrafoTDA grafo, int v2) {
+
+        // itero con el conjunto de vertices y pregunto si existe arista que lleve a v2
+        
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+        vertices.Sacar(v2);
+
+        ConjuntoTDA vertLlegando = new ConjuntoA();    // creo conjunto de vertices llegando
+        vertLlegando.InicializarConjunto();
+
+        while (!vertices.ConjuntoVacio()) {
+            int x = vertices.Elegir();
+
+            if (grafo.ExisteArista(x, v2)) {
+                vertLlegando.Agregar(x);
+            }
+            vertices.Sacar(x);
+        }
+
+        return vertLlegando;
+    }
     
     // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
     public static DiccionarioSimpleTDA SumaPesos(GrafoTDA grafo) {
