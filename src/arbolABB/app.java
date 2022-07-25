@@ -382,5 +382,21 @@ public class app {
         System.out.print("Null");
     }
     
+    // funcion para determinar si un arbol binario es un arbol de busqueda (ABB) - Ejercicio Simulacro 1 Final ---------------
+    public static boolean EsABB(TDAABB arbol) {
+        if (arbol.ArbolVacio()) {
+            return true;
+        } else if (arbol.HijoIzq().ArbolVacio() && arbol.HijoDer().ArbolVacio()) {
+            return true;
+        } else if (arbol.HijoIzq().ArbolVacio() && arbol.HijoDer().Raiz() > arbol.Raiz()) {
+            return EsABB(arbol.HijoDer());
+        } else if (arbol.HijoIzq().Raiz() < arbol.Raiz() && arbol.HijoDer().ArbolVacio()) {
+            return EsABB(arbol.HijoIzq());
+        } else if (arbol.HijoIzq().Raiz() < arbol.Raiz() && arbol.HijoDer().Raiz() > arbol.Raiz()) {
+            return EsABB(arbol.HijoIzq()) && EsABB(arbol.HijoDer());
+        } else {
+            return false;
+        }
+    }
 
 }
