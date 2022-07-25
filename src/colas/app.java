@@ -28,7 +28,7 @@ public class app {
         System.out.println(mostrarCola(cola));
         System.out.println(cola.Primero());*/
 
-		// simulacro
+		/*// simulacro
 		ColaTDA origen = new ColaPI();
 		origen.InicializarCola();
 
@@ -46,10 +46,26 @@ public class app {
 
 		origen.Multidesacolar(9);
 
-		mostrarCola(origen);
+		mostrarCola(origen);*/
 		/*System.out.println("HOLA");
 		EliminarRepetidosConcurrentes(origen);
 		mostrarCola(origen);*/
+
+		// simulacro 2 final
+		ColaTDA cola = new ColaPI();
+		cola.InicializarCola();
+
+		cola.Acolar(1);
+		cola.Acolar(3);
+		cola.Acolar(2);
+		cola.Acolar(5);
+		cola.Acolar(4);
+		cola.Acolar(3);
+		cola.Acolar(4);
+		cola.Acolar(5);
+		cola.Acolar(7);
+
+		System.out.println(MaxSec(cola));
 
 
     }
@@ -506,6 +522,36 @@ public class app {
 		prom = suma/4;	// calcular el promedio
 
 		return prom;
+
+	}
+
+	// funcion para generar un método que tome como entrada una cola y devuelva la maxima secuencia ascendente - Ejercicio 4 Simulacro 2 Final ---------------
+	public static int MaxSec(ColaTDA cola) {
+
+		int max = 1;	// máximo
+
+		// si la cola es 1,3,2,7 la max secuencia ascendente es 2
+		// si la cola es 1,3,2,7,4,5,6,8 la max secuencia ascendente es 4
+		// si la cola es 1,3,2,7,4,5,6,8,9 la max secuencia ascendente es 5
+		// si la cola es 1,3,2,7,4,5,6,8,9,10 la max secuencia ascendente es 6
+
+		int anterior = cola.Primero();
+		cola.Desacolar();
+
+		while (!cola.ColaVacia()) {	// agregar los elementos de la cola en las variables correspondientes
+			int nuevo = cola.Primero();
+
+			if (nuevo > anterior) {	// si el nuevo elemento es mayor al anterior, sumar 1 al máximo
+				max++;
+			} else {	// si el nuevo elemento es menor al anterior, reiniciar el máximo
+				max = 1;
+			}
+
+			anterior = nuevo;
+			cola.Desacolar();
+		}
+
+		return max;
 
 	}
 
