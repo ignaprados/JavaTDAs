@@ -31,22 +31,16 @@ public class app {
             grafo.AgregarVertice(3);
             grafo.AgregarVertice(4);
             grafo.AgregarVertice(5);
-            grafo.AgregarVertice(6);
-            grafo.AgregarVertice(7);
 
 
             grafo.AgregarArista(1, 2, 1);
             grafo.AgregarArista(2, 4, 1);
-            grafo.AgregarArista(3, 1, 1);
-            grafo.AgregarArista(4, 1, 1);
-            grafo.AgregarArista(4, 5, 1);
-            grafo.AgregarArista(5, 3, 1);
-            grafo.AgregarArista(5, 6, 1);
-            grafo.AgregarArista(6, 7, 1);
-            grafo.AgregarArista(4, 7, 1);
+            grafo.AgregarArista(1, 3, 1);
+            grafo.AgregarArista(2, 3, 1);
+            grafo.AgregarArista(2, 5, 1);
 
 
-            System.out.println(existeCamino(grafo, 1, 7));
+            System.out.println(topologico(grafo));
 
     }
 
@@ -456,6 +450,35 @@ public class app {
 
         return vertLlegando;
     }
+
+    // funcion para determinar si un grafo esta topológicamente ordenado (toda arista se dirige desde un vertice menor a otro mayor) - Ejercicio Simulacro 2 Final --------------
+    public static boolean topologico(GrafoTDA grafo) {
+
+        // itero con el conjunto de vertices y me fijo si los vertices que salen de un vertice llegan a otro vertice mayor
+
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+
+        while (!vertices.ConjuntoVacio()) { // itero en los vertices
+
+            int x = vertices.Elegir();
+            vertices.Sacar(x);
+
+            ConjuntoTDA vertSalientes = verticesSalientes(grafo, x); // todos los vertices que salen de x
+
+            while (!vertSalientes.ConjuntoVacio()) {    // itero en los vertices que salen de x
+                int y = vertSalientes.Elegir();
+
+                if (x > y) {    // si la arista que va de x a y (x es mayor a y) no es topológico
+                    return false;
+                }
+
+                vertSalientes.Sacar(y);
+            }
+        }
+
+        return true;
+    }
+
     
     // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
     public static DiccionarioSimpleTDA SumaPesos(GrafoTDA grafo) {
