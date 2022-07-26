@@ -31,16 +31,27 @@ public class app {
             grafo.AgregarVertice(3);
             grafo.AgregarVertice(4);
             grafo.AgregarVertice(5);
+            grafo.AgregarVertice(6);
 
 
-            grafo.AgregarArista(1, 2, 1);
-            grafo.AgregarArista(2, 4, 1);
-            grafo.AgregarArista(1, 3, 1);
-            grafo.AgregarArista(2, 3, 1);
+            grafo.AgregarArista(1, 6, 1);
+            grafo.AgregarArista(1, 4, 1);
             grafo.AgregarArista(2, 5, 1);
+            grafo.AgregarArista(3, 1, 1);
+            grafo.AgregarArista(3, 2, 1);
+
+            ConjuntoTDA c = new ConjuntoA();
+            c.InicializarConjunto();
+
+            c.Agregar(1);
+            c.Agregar(2);
+            c.Agregar(3);
+
+            ConjuntoTDA vecin = vecindario(grafo, c);
+            
 
 
-            System.out.println(topologico(grafo));
+            System.out.println(vecin.Mostrarconjunto());
 
     }
 
@@ -478,6 +489,34 @@ public class app {
 
         return true;
     }
+
+    // funcion para determinar el vecindario del conjunto de nodos de un grafo (todos los que salen de esos nodos) - Ejercicio Simulacro 4 Final --------------
+    public static ConjuntoTDA vecindario(GrafoTDA grafo, ConjuntoTDA conjunto) {
+
+        ConjuntoTDA vecindario = new ConjuntoA();    // creo conjunto de vecindario
+        vecindario.InicializarConjunto();
+
+        while (!conjunto.ConjuntoVacio()) { // itero en los vertices del conjunto
+            int x = conjunto.Elegir();
+            conjunto.Sacar(x);
+
+            ConjuntoTDA salientes = verticesSalientes(grafo, x); // para cada vertice obtengo los vertices que salen de x
+
+            while (!salientes.ConjuntoVacio()) {    // itero en los vertices que salen de x
+                int y = salientes.Elegir();
+                salientes.Sacar(y);
+
+                if (!conjunto.Pertenece(y)) {    // si y no pertenece al conjunto, agregar al vecindario
+                    vecindario.Agregar(y);
+                }
+                
+            }
+
+        }
+
+        return vecindario;
+    }
+
 
     
     // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
