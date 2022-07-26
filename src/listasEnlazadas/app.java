@@ -1,5 +1,8 @@
 package listasEnlazadas;
 
+import arbolABB.*;
+import colas.*;
+
 public class app {
 	
     /*--------------------------------- MAIN ---------------------------------*/
@@ -24,20 +27,41 @@ public class app {
         Nodo uno = new Nodo();
         Nodo dos = new Nodo();
         Nodo tres = new Nodo();
+
         Nodo cuatro = new Nodo();
+        Nodo cinco = new Nodo();
+        Nodo seis = new Nodo();
 
         System.out.println(uno);
 
-        uno.dato = 2;
+        uno.dato = 1;
         uno.sig = dos;
         dos.dato = 2;
         dos.sig = tres;
-        tres.dato = 2;
-        tres.sig = cuatro;
-        cuatro.dato = 2;
-        cuatro.sig = null;
+        tres.dato = 3;
+        tres.sig = null;
 
-        imprimirListaNodo(generarLista(uno, 2));
+        imprimirListaNodo(uno);
+
+
+        cuatro.dato = 4;
+        cuatro.sig = cinco;
+        cinco.dato = 5;
+        cinco.sig = seis;
+        seis.dato = 6;
+        seis.sig = null;
+
+        
+        imprimirListaNodo(cuatro);
+
+        
+        //listasEnlazadasTDA lista = MezclaABB(uno, cuatro);
+
+        //lista.mostrar();
+
+        
+
+        imprimirListaNodo(Mezcla(uno, cuatro));
 
         /*// Ejercicio simularo
         Nodo uno = new Nodo();
@@ -180,4 +204,84 @@ public class app {
         }
     }
 
+    // funcion para ordenar de manera ascendente una lista de forma recursiva ---------------
+    public static Nodo ordenarLista(Nodo origen) {
+        if (origen == null) {   // si el nodo es null, retorno null (lista vacia)
+            return null;
+        } else if (origen.sig == null) {   // si el nodo es el ultimo, retorno el nodo (o si hay un solo nodo)
+            return origen;
+        } else {    // si no es el ultimo, llamo a la funcion de ordenar lista con el nodo siguiente
+            origen.sig = ordenarLista(origen.sig);
+            if (origen.dato > origen.sig.dato) {   // si el dato del nodo es mayor al dato del nodo siguiente, intercambio los datos
+                int aux = origen.dato;
+                origen.dato = origen.sig.dato;
+                origen.sig.dato = aux;
+            }
+            return origen;
+        }
+    }
+
+    // funcion para concatenar 2 listas y ordenarlas de menor a mayor (Mezcla) - Simulacro 4 Final ---------------
+    public static Nodo Mezcla(Nodo origen1, Nodo origen2) {
+
+        concatenarListas(origen1, origen2); // concateno las listas
+
+        ordenarLista(origen1); // ordeno la lista
+
+        return origen1;
+    }
+
+
+    // funcion para pasar una lista a un ABB y insertar el recorrido inorden en una lista enlazada - Simulacro 4 Final ---------------
+    public static listasEnlazadasTDA MezclaABB(Nodo origen1, Nodo origen2) {
+
+        Nodo aux = new Nodo(); // auxiliar para recorrer la lista
+        aux = origen1;
+
+        ABB arbol = new ABB(); // arbol para insertar los nodos de la lista en orden
+        arbol.InicializarArbol();
+        
+        while (aux.sig != null) { // inserta los nodos de la lista en orden en el arbol
+            arbol.AgregarElem(aux.dato);
+            aux = aux.sig;
+        }
+        arbol.AgregarElem(aux.dato);
+
+        aux = origen2; // auxiliar para recorrer la lista 2
+
+        while (aux.sig != null) { // inserta los nodos de la lista en orden en el arbol
+            arbol.AgregarElem(aux.dato);
+            System.out.println("se agrego el nodo: " + aux.dato);
+            aux = aux.sig;
+        }
+        arbol.AgregarElem(aux.dato);
+
+        ColaTDA cola = new ColaLD(); // cola para recorrer el arbol en inorden
+        cola.InicializarCola();
+
+        InOrden(arbol, cola);   // recorre el arbol en inorden y lo inserta en la cola
+
+        System.out.println(cola.Mostrarcola()); // muestra la cola
+        
+        // agregar los elementos de la cola a la lista enlazada
+        listasEnlazadasTDA melange = new listaEnlazada();
+        melange.inicializarLista();
+
+        while (!cola.ColaVacia()) {
+            melange.agregarF(cola.Primero());
+            cola.Desacolar();
+        }
+
+        return melange;
+    }
+
+    // recorrido INORDEN del ABB (Agregando los elementos en la cola) ---------------
+    public static void InOrden(TDAABB arbol, ColaTDA cola) {
+        if (!arbol.ArbolVacio()) {
+            InOrden(arbol.HijoIzq(), cola);
+            cola.Acolar(arbol.Raiz());
+            InOrden(arbol.HijoDer(), cola);
+        }
+    }
+        
 }
