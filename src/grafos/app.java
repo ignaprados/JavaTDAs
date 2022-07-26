@@ -196,7 +196,7 @@ public class app {
         return grado;
     }
 
-    // funcion para hacer un arbol bidireccional - Ejercicio PPT --------------
+    // funcion para hacer un grafo bidireccional - Ejercicio PPT --------------
     public static GrafoTDA Bi(GrafoTDA grafo) {
         ConjuntoTDA c = new ConjuntoA();
         c.InicializarConjunto();
@@ -451,7 +451,7 @@ public class app {
         return vertLlegando;
     }
 
-    // funcion para determinar si un grafo esta topológicamente ordenado (toda arista se dirige desde un vertice menor a otro mayor) - Ejercicio Simulacro 2 Final --------------
+    // funcion para determinar si un grafo esta topológicamente ordenado (toda arista se dirige desde un vertice menor a otro mayor) - Ejercicio Simulacro 4 Final --------------
     public static boolean topologico(GrafoTDA grafo) {
 
         // itero con el conjunto de vertices y me fijo si los vertices que salen de un vertice llegan a otro vertice mayor
