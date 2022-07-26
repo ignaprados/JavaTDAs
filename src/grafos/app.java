@@ -32,13 +32,19 @@ public class app {
             grafo.AgregarVertice(4);
             grafo.AgregarVertice(5);
             grafo.AgregarVertice(6);
+            grafo.AgregarVertice(7);
+            grafo.AgregarVertice(8);
 
 
             grafo.AgregarArista(1, 6, 1);
             grafo.AgregarArista(1, 4, 1);
             grafo.AgregarArista(2, 5, 1);
-            grafo.AgregarArista(3, 1, 1);
+            grafo.AgregarArista(3, 4, 1);
+            grafo.AgregarArista(2, 3, 1);
+            grafo.AgregarArista(1, 3, 1);
+            grafo.AgregarArista(4, 5, 1);
             grafo.AgregarArista(3, 2, 1);
+            grafo.AgregarArista(2, 1, 1);
 
             ConjuntoTDA c = new ConjuntoA();
             c.InicializarConjunto();
@@ -46,12 +52,16 @@ public class app {
             c.Agregar(1);
             c.Agregar(2);
             c.Agregar(3);
-
-            ConjuntoTDA vecin = vecindario(grafo, c);
             
 
-
+            ConjuntoTDA vecin = vecindario(grafo, c);
+            System.out.println("Vecindario: ");
             System.out.println(vecin.Mostrarconjunto());
+
+            ConjuntoTDA comple = complementoVecindario(grafo, c);
+            
+            System.out.println("Complemento: ");
+            System.out.println(comple.Mostrarconjunto());
 
     }
 
@@ -496,28 +506,65 @@ public class app {
         ConjuntoTDA vecindario = new ConjuntoA();    // creo conjunto de vecindario
         vecindario.InicializarConjunto();
 
-        while (!conjunto.ConjuntoVacio()) { // itero en los vertices del conjunto
+        ConjuntoTDA aux = new ConjuntoA();    // creo conjunto auxiliar para no perder conjunto original
+        aux.InicializarConjunto();
+
+        ConjuntoTDA aux2 = new ConjuntoA();    // creo conjunto auxiliar2 para no perder conjunto original
+        aux2.InicializarConjunto();
+
+        while (!conjunto.ConjuntoVacio()) { // copiar conjunto a auxiliar y auxiliar 2
             int x = conjunto.Elegir();
+            aux.Agregar(x);
+            aux2.Agregar(x);
             conjunto.Sacar(x);
+        }
+
+        while (!aux2.ConjuntoVacio()) { // vuelvo al conjunto original
+            int x = aux2.Elegir();
+            aux2.Sacar(x);
+            conjunto.Agregar(x);
+        }
+
+        while (!aux.ConjuntoVacio()) { // itero en los vertices del conjunto
+            int x = aux.Elegir();
 
             ConjuntoTDA salientes = verticesSalientes(grafo, x); // para cada vertice obtengo los vertices que salen de x
 
             while (!salientes.ConjuntoVacio()) {    // itero en los vertices que salen de x
                 int y = salientes.Elegir();
-                salientes.Sacar(y);
 
                 if (!conjunto.Pertenece(y)) {    // si y no pertenece al conjunto, agregar al vecindario
                     vecindario.Agregar(y);
                 }
-                
+                salientes.Sacar(y);
             }
-
+            aux.Sacar(x);
         }
 
         return vecindario;
     }
 
+    // funcion para determinar el complemento del vecindario del conjunto de nodos de un grafo (todos los que no salen de los vertices (no estan en el vecindario)) - Ejercicio Simulacro 4 Final --------------
+    public static ConjuntoTDA complementoVecindario(GrafoTDA grafo, ConjuntoTDA conjunto) {
 
+        ConjuntoTDA complemento = new ConjuntoA();    // creo conjunto de complemento
+        complemento.InicializarConjunto();
+
+        ConjuntoTDA vecindario = vecindario(grafo, conjunto); // obtengo el vecindario del conjunto de nodos
+
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+
+        while (!vertices.ConjuntoVacio()) { // itero en los vertices del conjunto
+            int x = vertices.Elegir();
+            vertices.Sacar(x);
+
+            if (!vecindario.Pertenece(x) && !conjunto.Pertenece(x)) {    // si el vertice no pertenece al vecindario y no pertenece al conjunto, agregar al complemento
+                    complemento.Agregar(x);
+            }
+        }
+
+        return complemento;
+    }
     
     // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
     public static DiccionarioSimpleTDA SumaPesos(GrafoTDA grafo) {
