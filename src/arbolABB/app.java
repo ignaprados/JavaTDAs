@@ -14,6 +14,16 @@ public class app {
         arbol.AgregarElem(2);
         arbol.AgregarElem(1);
 
+        TDAABB arbol2 = new ABB();
+        arbol2.InicializarArbol();
+        arbol2.AgregarElem(6);
+        arbol2.AgregarElem(3);
+        arbol2.AgregarElem(4);
+        arbol2.AgregarElem(2);
+        arbol2.AgregarElem(1);
+
+        System.out.println(DiferenciaX(arbol, arbol2));
+
         /*TDAABB arbol2 = new ABB();
         arbol2.InicializarArbol();
         System.out.println("ARBOL1: ");
@@ -105,6 +115,18 @@ public class app {
             return (arbol.Raiz());
         } else {    // si el hijo izquierdo no está vacio, se busca en el hijo izquierdo.
             return (Menor(arbol.HijoIzq()));
+        }
+    }
+
+    // funcion para obtener el valor del mayor elemento de un ABB ---------------
+    public static int Mayor(TDAABB arbol) {
+        if (arbol.ArbolVacio()) {   // si el arbol está vacio, no existe.
+            return 0;
+
+        } else if (arbol.HijoDer().ArbolVacio()) {  // si el hijo derecho está vacio, el mayor es la raiz.
+            return (arbol.Raiz());
+        } else {    // si el hijo izquierdo no está vacio, se busca en el hijo derecho.
+            return (Mayor(arbol.HijoDer()));
         }
     }
 
@@ -398,5 +420,16 @@ public class app {
             return false;
         }
     }
+
+    // funcion para obtener x = x1 - x2  |  - Ejercicio Simulacro 6 Final ---------------
+    // x1 es la diferencia del mayor elemento menos el menor elemento de A1
+    // x2 es la diferencia del mayor elemento menos el menor elemento de A2
+    public static int DiferenciaX(TDAABB A1, TDAABB A2) {
+        int x1 = Mayor(A1) - Menor(A1);
+        int x2 = Mayor(A2) - Menor(A2);
+
+        return x1 - x2;
+    }
+
 
 }
