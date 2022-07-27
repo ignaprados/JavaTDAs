@@ -63,7 +63,17 @@ public class app {
         conjunto.Agregar(2);
         conjunto.Agregar(3);
 
-        ordenarVerticesCola(conjunto);
+        ConjuntoTDA conjunto2 = new ConjuntoA();
+        conjunto2.InicializarConjunto();
+
+        conjunto2.Agregar(5);
+        conjunto2.Agregar(6);
+        
+
+        ColaTDA prod = productoCartesiano(conjunto, conjunto2);
+
+        System.out.println(prod.Mostrarcola());
+
 
     }
 
@@ -279,6 +289,39 @@ public class app {
             cola.Desacolar();
         }
 
+    }
+
+    // funcion para obtener el producto cartesiano de dos conjuntos en una cola - Ejercicio Simulacro 6 Final ---------------
+    public static ColaTDA productoCartesiano(ConjuntoTDA A, ConjuntoTDA B) {
+
+        ColaTDA prod = new ColaLD(); // conjunto para guardar el producto cartesiano
+        prod.InicializarCola();
+        
+        ConjuntoTDA aux = new ConjuntoA(); // conjunto auxiliar para guardar los elementos de A
+        aux.InicializarConjunto();
+
+        while (!A.ConjuntoVacio()) { // itero con los elementos del primer conjunto
+            int a = A.Elegir();
+            A.Sacar(a);
+            
+            while (!B.ConjuntoVacio()) { // itero con los elementos del segundo conjunto (para cada B, le agrego el elemento de A - a la cola)
+                int b = B.Elegir();
+                aux.Agregar(b); // guardo el B para no perderlo
+                B.Sacar(b);
+
+                prod.Acolar(a); // agrego el A a la cola
+                prod.Acolar(b); // agrego el B a la cola
+            }
+
+            while (!aux.ConjuntoVacio()) { // vuelvo a agregar los elem de B del aux a B
+                int x = aux.Elegir();
+                B.Agregar(x);
+                aux.Sacar(x);
+            }
+
+        }
+
+        return prod;
     }
 
 }
