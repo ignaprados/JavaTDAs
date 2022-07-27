@@ -23,7 +23,7 @@ public class app {
             grafo.AgregarArista(2, 3, 9);
             d = AdyacentesEnDicc(grafo);
             mostrarDiccionarioMul(d);*/
-
+/* 
             GrafoTDA grafo = new GrafoMA();
             grafo.InicializarGrafo();
             grafo.AgregarVertice(1);
@@ -61,7 +61,34 @@ public class app {
             ConjuntoTDA comple = complementoVecindario(grafo, c);
             
             System.out.println("Complemento: ");
-            System.out.println(comple.Mostrarconjunto());
+            System.out.println(comple.Mostrarconjunto());*/
+
+
+            GrafoTDA grafo = new GrafoMA();
+            grafo.InicializarGrafo();
+            grafo.AgregarVertice(1);
+            grafo.AgregarVertice(2);
+            grafo.AgregarVertice(3);
+            grafo.AgregarVertice(4);
+            grafo.AgregarVertice(5);
+
+            grafo.AgregarArista(1, 2, 1);
+            grafo.AgregarArista(3, 4, 1);
+            grafo.AgregarArista(4, 5, 1);
+            grafo.AgregarArista(2, 5, 1);
+
+            ConjuntoTDA a = verticesIniciales(grafo);
+
+            System.out.println("Vertices iniciales: ");
+            System.out.println(a.Mostrarconjunto());
+
+            ConjuntoTDA c = verticesFinales(grafo);
+
+            System.out.println("Vertices finales: ");
+            System.out.println(c.Mostrarconjunto());
+
+
+
 
     }
 
@@ -564,6 +591,46 @@ public class app {
         }
 
         return complemento;
+    }
+
+    // funcion para obtener los vertices iniciales de un grafo (vertices sin aristas entrantes) - Ejercicio Simulacro 9 Final --------------
+    public static ConjuntoTDA verticesIniciales(GrafoTDA grafo) {
+
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+
+        ConjuntoTDA vertIniciales = new ConjuntoA();    // creo conjunto de vertices iniciales
+        vertIniciales.InicializarConjunto();
+
+        while (!vertices.ConjuntoVacio()) { // itero en los vertices
+            int x = vertices.Elegir();
+            vertices.Sacar(x);
+
+            if (verticesLlegando(grafo, x).ConjuntoVacio()) {    // si el vertice no tiene aristas entrantes, agregarlo al conjunto de vertices iniciales
+                vertIniciales.Agregar(x);
+            }
+        }
+
+        return vertIniciales;
+    }
+
+    // funcion para obtener los vertices finales de un grafo (vertices sin aristas salientes) - Ejercicio Simulacro 9 Final --------------
+    public static ConjuntoTDA verticesFinales(GrafoTDA grafo) {
+
+        ConjuntoTDA vertices = grafo.Vertices();    // creo conjunto de vertices
+
+        ConjuntoTDA vertFinales = new ConjuntoA();    // creo conjunto de vertices iniciales
+        vertFinales.InicializarConjunto();
+
+        while (!vertices.ConjuntoVacio()) { // itero en los vertices
+            int x = vertices.Elegir();
+            vertices.Sacar(x);
+
+            if (verticesSalientes(grafo, x).ConjuntoVacio()) {    // si el vertice no tiene aristas salientes, agregarlo al conjunto de vertices iniciales
+                vertFinales.Agregar(x);
+            }
+        }
+
+        return vertFinales;
     }
     
     // funcion para obterner un diccionario simple con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
