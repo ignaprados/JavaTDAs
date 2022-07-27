@@ -566,7 +566,7 @@ public class app {
         return complemento;
     }
     
-    // funcion para obterner un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
+    // funcion para obterner un diccionario simple con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Parcial 2 --------------
     public static DiccionarioSimpleTDA SumaPesos(GrafoTDA grafo) {
         DiccionarioSimpleTDA d = new DiccionarioSimpleA();
         d.InicializarDiccionario();
@@ -598,7 +598,7 @@ public class app {
         return d; 
     }
 
-    // funcion para obtener un diccionario con la suma de los pesos de las aristas del vertice - Ejercicio Simulacro Final --------------
+    // funcion para obtener un diccionario multiple con los nodos adyacentes del vertice - Ejercicio Simulacro 5 Final --------------
     public static DiccionarioMultipleTDA AdyacentesEnDicc(GrafoTDA grafo) {
         DiccionarioMultipleTDA d = new DiccionarioMultipleA();
         d.InicializarDiccionario();
