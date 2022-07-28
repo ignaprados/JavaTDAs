@@ -431,5 +431,19 @@ public class app {
         return x1 - x2;
     }
 
+    // funcion para eliminar todas las hojas de un arbol ABB - Ejercicio Simulacro Final ---------------
+    public static TDAABB EliminarHojas(TDAABB arbol) {
+
+        if (!arbol.ArbolVacio()) {
+            if ((arbol.HijoDer().ArbolVacio()) && (arbol.HijoIzq().ArbolVacio())) {
+                arbol.EliminarElem(arbol.Raiz());
+            } else {
+                EliminarHojas(arbol.HijoDer());
+                EliminarHojas(arbol.HijoIzq());
+            }
+        }
+        return arbol;
+    }
+
 
 }
